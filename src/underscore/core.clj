@@ -4,7 +4,7 @@
   (clojure.string/join string pattern))
 
 (defn- get-full-name [f]
-  (-> f str (clojure.string/split #"[\$@]") butlast (reverse-join "/")))
+  (-> f str (.replaceAll "_"  "-") (clojure.string/split #"[\$@]") butlast (reverse-join "/")))
 
 (defn get-fun [full-name]
   (->> full-name (str "#'") load-string))
