@@ -9,6 +9,8 @@
 
 (defn map-f [x] x)
 (defn map-f-with-i [x i] (* x i))
+(defn add [x y] (+ x y))
+(defn add-with-index [x y i] (+ i (add x y)))
 
 (fact "know how many arguments the a function needs"
       (num-of-arguments f-with-1-argument) => 1
@@ -19,3 +21,11 @@
              (_map map-f [1 2 3]) => [1 2 3])
        (fact "_map can work as map-indexed"
              (_map map-f-with-i [0 1 2]) => [0 1 4 ]))
+
+(facts "_reduce"
+       (facts "with defualt value"
+              (fact "as reduce"
+                    (_reduce add 0 [0 1 2]) => 3)
+              (fact "with index"
+                    (_reduce add-with-index 0 [0 1 2])=> 6))
+       )
