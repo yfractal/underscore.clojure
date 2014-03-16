@@ -28,4 +28,8 @@
                     (_reduce add 0 [0 1 2]) => 3)
               (fact "with index"
                     (_reduce add-with-index 0 [0 1 2])=> 6))
-       )
+       (facts "wihout default value"
+              (fact "as reduce"
+                    (_reduce add [0 1 2]) => 3)
+              (fact "with index"
+                    (_reduce add-with-index [0 1 2]) => 4)))
