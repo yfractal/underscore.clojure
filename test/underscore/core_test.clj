@@ -33,3 +33,15 @@
                     (_reduce add [0 1 2]) => 3)
               (fact "with index"
                     (_reduce add-with-index [0 1 2]) => 4)))
+
+; 1 get value
+(facts "_dispatch, do different operation by the arg-num"
+       (let [f0 (fn [] 123)
+             f1 (fn [x] x)
+             f2 (fn [x y] (+ x y))]
+        (fact "arg-num = 0, execulate fisrt function"
+              (_dispatch 0 f0 "" "") => (f0))
+        (fact "1, the third"
+              (_dispatch 1 f0 (f1 10) "") => (f1 10))
+        (fact "2, the third"
+              (_dispatch 2 f0 "" (f2 1 2)) => 3)))
