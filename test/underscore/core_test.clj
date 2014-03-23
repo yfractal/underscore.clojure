@@ -12,10 +12,6 @@
 (defn add [x y] (+ x y))
 (defn add-with-index [x y i] (+ i (add x y)))
 
-(fact "know how many arguments the a function needs"
-      (num-of-arguments f-with-1-argument) => 1
-      (num-of-arguments f-with-2-argument) => 2)
-
 (facts "_map"
        (fact "_map can work as map"
              (_map map-f [1 2 3]) => [1 2 3])
@@ -34,14 +30,13 @@
               (fact "with index"
                     (_reduce add-with-index [0 1 2]) => 4)))
 
-; 1 get value
-(facts "_dispatch, do different operation by the arg-num"
+(facts "_dispatch, do different operation by fun's arg-num"
        (let [f0 (fn [] 123)
              f1 (fn [x] x)
              f2 (fn [x y] (+ x y))]
-        (fact "arg-num = 0, execulate fisrt function"
-              (_dispatch 0 f0 "" "") => (f0))
-        (fact "1, the third"
-              (_dispatch 1 f0 (f1 10) "") => (f1 10))
-        (fact "2, the third"
-              (_dispatch 2 f0 "" (f2 1 2)) => 3)))
+         (fact "call f0"
+               (_dispatch2 (map f1 [1]) "") => (map f1 [1]))
+         (fact "run arg ,try form 2"
+               (_dispatch2 (map f0 [1]) (map f1 [1])) => (map f1 [1])
+               )
+         ))
