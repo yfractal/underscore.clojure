@@ -4,7 +4,7 @@
 (def NO-INDEX 1)
 (def WITH-INDEX 2)
 
-(defmacro _dispatch2 [f-with-1-argument-form f-with-2-argument-form]
+(defmacro _dispatch [f-with-1-argument-form f-with-2-argument-form]
   `(try
      (doall
       ~f-with-1-argument-form) ; force throw exception in right place
@@ -21,7 +21,7 @@
   ([f coll]
      (_map f coll 0))
   ([f coll i]
-       (_dispatch2 (map f coll)
+       (_dispatch (map f coll)
                    (if (empty? coll)
                      nil
                      (cons (f (first coll) i) (_map f (rest coll) (inc i)))))))
@@ -31,12 +31,27 @@
      (_reduce f val coll 0))
   ([f coll]
      (_dispatch-val (reduce f coll)
-                 (let [val (f (first coll) (second coll) 0)
-                       remain (rest (rest coll))]
-                   (_reduce f val remain 1))))
+                    (let [val (f (first coll) (second coll) 0)
+                          remain (rest (rest coll))]
+                      (_reduce f val remain 1))))
   ([f val coll i]
      (_dispatch-val (reduce f val coll)
                     (if (empty? coll)
                       val
                       (let [val* (f val (first coll) i)]
                         (_reduce f val* (rest coll) (inc i)))))))
+
+(defn find*
+  [f coll]
+  (cond (empty? coll) nil
+        (f (first coll)) (first coll)
+        :else (find* f (rest coll))))
+
+(defn _find
+  ([f coll]
+  (_find f coll 0))
+  ([f coll i]
+  (_dispatch-val (find* f)
+                 (cond (empty? coll) nil
+                       (f (first coll) i) (first coll)
+                       :else (_find f (rest coll) (inc i))))))

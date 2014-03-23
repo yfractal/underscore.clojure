@@ -35,8 +35,15 @@
              f1 (fn [x] x)
              f2 (fn [x y] (+ x y))]
          (fact "call f0"
-               (_dispatch2 (map f1 [1]) "") => (map f1 [1]))
+               (_dispatch (map f1 [1]) "") => (map f1 [1]))
          (fact "run arg ,try form 2"
-               (_dispatch2 (map f0 [1]) (map f1 [1])) => (map f1 [1])
-               )
-         ))
+               (_dispatch (map f0 [1]) (map f1 [1])) => (map f1 [1]))))
+
+(facts "find"
+       (fact "works like _, one arg"
+             (find* #(= %  0) [1 0]) => 0)
+       (fact "not find, get nil"
+             (find* #(= %  10) [1 0]) => nil)
+       (fact "2 args"
+             ; coll's ele as index
+             (_find #(= % %2) [10 1]) => 1))
